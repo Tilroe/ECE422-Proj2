@@ -10,7 +10,7 @@ import sys
 if len(sys.argv) < 4:
     print('To few arguments; you need to specify 3 arguments.')
     print('Default values will be used for server_ip, no of users and think time.\n')
-    swarm_master_ip = '10.2.9.108'  # ip address of the Swarm master node
+    swarm_master_ip = '10.2.6.117'  # ip address of the Swarm master node
     no_users = 1  # number of concurrent users sending request to the server
     think_time = 1  # the user think time (seconds) in between consequent requests
 else:
