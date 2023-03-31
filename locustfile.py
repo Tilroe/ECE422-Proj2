@@ -1,11 +1,11 @@
-from locust import HttpUser, task, between
+from locust import HttpUser, task, between, constant
 from locust.env import Environment
 
 import socket
 import gevent
 
 # -- Constants --
-sample_time         = 10 # How often to send the average response time to the swarm manager (in seconds)
+sample_time         = 30 # How often to send the average response time to the swarm manager (in seconds)
 percentile          = 95.0 # Percentile of response times to consider for the average
 swarm_manager_ip    = '10.2.6.117'
 web_app_port        = 8000
@@ -18,7 +18,7 @@ def update_avg_response_time(environment: Environment):
         avg_response_time = environment.    \
                             stats.  \
                             get("/", "GET").    \
-                            get_current_response_time_percentile(percentile)
+                            get_current_response_time_percentile(percentile) # https://docs.locust.io/en/stable/_modules/locust/stats.html#RequestStats
         print("Average response time: " + str(avg_response_time))
 
         # Send average response time to cluster manager
@@ -35,7 +35,7 @@ def update_avg_response_time(environment: Environment):
 
 # -- User simulator --
 class AutoScaleUser(HttpUser):
-    wait_time = between(1, 5)
+    wait_time = constant(1)
     host = "http://" + swarm_manager_ip + ":" + str(web_app_port)
 
     @task
